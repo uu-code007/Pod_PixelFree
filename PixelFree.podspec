@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   
   
     s.name      = 'PixelFree'
-    s.version   = '2.3.0'
+    s.version   = '2.4.0'
     s.summary   = 'numu 美颜 sdk for iOS.'
     s.homepage  = 'https://www.qiniu.com'
     s.license   = 'Apache License, Version 2.0'

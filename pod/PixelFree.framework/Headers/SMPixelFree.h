@@ -12,14 +12,13 @@
 #import <OpenGLES/ES2/glext.h>
 #import "pixelFree_c.hpp"
 //#import "SMFilterModel.h"
-
 NS_ASSUME_NONNULL_BEGIN
 
 __attribute__((visibility("default"))) @interface SMPixelFree : NSObject
 
 /// 初始化
 /// @param context sdk 运行的上线文，context != nil  所有着色器程序将在这里初始化， 否在视频第一帧处理时候初始化
-- (instancetype)initWithProcessContext:(EAGLContext *)context srcFilterPath:(NSString *)filterPath srcDetectPath:(NSString *)srcDetectPath authFile:(NSString *)authFile;
+- (instancetype)initWithProcessContext:(EAGLContext *)context srcFilterPath:(NSString *)filterPath authFile:(NSString *)authFile;
 /*!
  @property glContext
  @brief OpenGL context
@@ -45,12 +44,12 @@ __attribute__((visibility("default"))) @interface SMPixelFree : NSObject
 @param rotationMode 人脸检测方向
 
 */
-- (void)processWithBuffer:(CVPixelBufferRef)pixelBuffer rotationMode:(PFRotationMode)rotationMode;
+- (int)processWithBuffer:(CVPixelBufferRef)pixelBuffer rotationMode:(PFRotationMode)rotationMode;
 
 /**
 图片处理
 
-@param pixelBuffer 纹理数据
+@param image 纹理数据
 
 @param rotationMode 人脸检测方向
 
@@ -63,7 +62,6 @@ __attribute__((visibility("default"))) @interface SMPixelFree : NSObject
 
 // 加载美颜bundle
 - (void)createBeautyItemFormBundle:(void*)data size:(int)sz;
-
 
 @end
 
