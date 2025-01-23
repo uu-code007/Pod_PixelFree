@@ -81,6 +81,16 @@ typedef struct {
     const char *bgSrcPath;
 } PFFiterLvmuSetting;
 
+typedef struct {
+    bool isUse; //false
+    char *path; //
+    float positionX;// 0-1.0
+    float positionY;// 0-1.0
+    float w;  // 0-1.0
+    float h;// 0-1.0
+    bool isMirror; // false
+} PFFiterWatermark;
+
 /* 美颜类型 */
 typedef enum PFBeautyFiterType{
     PFBeautyFiterTypeFace_EyeStrength = 0,
@@ -112,7 +122,6 @@ typedef enum PFBeautyFiterType{
     PFBeautyFiterTypeFace_eye_rotate,
     //开眼角
     PFBeautyFiterTypeFace_canthus,
-    
     //磨皮
     PFBeautyFiterTypeFaceBlurStrength,
     //美白
@@ -133,9 +142,29 @@ typedef enum PFBeautyFiterType{
     PFBeautyFiterLvmu,
     // 2D 贴纸
     PFBeautyFiterSticker2DFilter,
+    // 一键美颜
+    PFBeautyFiterTypeOneKey = 25,
+    // 水印
+    PFBeautyFiterWatermark,
+    // 扩展字段
+    PFBeautyFiterExtend,
     
 } PFBeautyFiterType;
 
+/* 一键美颜类型 */
+typedef enum PFBeautyTypeOneKey{
+    // 关闭一键美颜
+    PFBeautyTypeOneKeyNormal = 0,
+    // 自然
+    PFBeautyTypeOneKeyNatural,
+    // 可爱
+    PFBeautyTypeOneKeyCute,
+    // 女神
+    PFBeautyTypeOneKeyGoddess,
+    // 白净
+    PFBeautyTypeOneKeyFair,
+    
+}PFBeautyTypeOneKey;
 
 PF_CAPI_EXPORT extern const char* PF_Version();
 
@@ -153,6 +182,10 @@ PF_CAPI_EXPORT extern int PF_processWithBuffer(PFPixelFree* pixelFree,PFIamgeInp
 
 PF_CAPI_EXPORT extern void PF_pixelFreeSetBeautyFiterParam(PFPixelFree* pixelFree, int key,void *value);
 PF_CAPI_EXPORT extern void PF_createBeautyItemFormBundle(PFPixelFree* pixelFree, void *data,int size,PFSrcType type);
+
+PF_CAPI_EXPORT extern void PF_pixelFreeGetFaceRect(PFPixelFree* pixelFree,float *faceRect);
+
+PF_CAPI_EXPORT extern int PF_pixelFreeHaveFaceSize(PFPixelFree* pixelFree);
 #ifdef __cplusplus
 }
 #endif
