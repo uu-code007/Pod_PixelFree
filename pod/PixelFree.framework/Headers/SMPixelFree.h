@@ -11,7 +11,6 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 #import "pixelFree_c.hpp"
-//#import "SMFilterModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 __attribute__((visibility("default"))) @interface SMPixelFree : NSObject
@@ -66,6 +65,14 @@ __attribute__((visibility("default"))) @interface SMPixelFree : NSObject
 - (void)pixelFreeGetFaceRect:(float *)faceRect;
 
 - (int)getPixelFreeFaceNum;
+
+// 图片调色设置
+- (int)pixelFreeSetColorGrading:(PFImageColorGrading *)imageColorGrading;
+
+// HLS 功能
+- (int)pixelFreeAddHLSFilter:(PFHLSFilterParams*)HLSFilterParams;
+- (int)pixelFreeDeleteHLSFilter:(int)handle;
+- (int)pixelFreeChangeHLSFilter:(int)handle params:(PFHLSFilterParams*)HLSFilterParams;
 
 @end
 

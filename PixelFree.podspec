@@ -4,12 +4,12 @@ Pod::Spec.new do |s|
   
   
     s.name      = 'PixelFree'
-    s.version   = '2.4.6'
+    s.version   = '2.4.8'
     s.summary   = 'numu 美颜 sdk for iOS.'
     s.homepage  = 'https://www.qiniu.com'
     s.license   = 'Apache License, Version 2.0'
     s.author    = { "code_007" => "ios_sunmu@icloud.com" }
-    s.source    = { :git => "https://github.com/mu-code007/Pod_PixelFree.git", :tag => "v2.4.5" }
+    s.source    = { :git => "https://github.com/mu-code007/Pod_PixelFree.git", :tag => "v2.4.8" }
     s.resources = '**/*.{bundle,jpeg}'
 
     s.platform                = :ios
