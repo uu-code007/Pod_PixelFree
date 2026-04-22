@@ -45,10 +45,17 @@ typedef enum PFRotationMode{
   PFRotationMode270 = 3,
 } PFRotationMode;
 
+typedef enum PFFaceDetectMode {
+  PF_FACE_DETECT_MODE_IMAGE = 0,
+  PF_FACE_DETECT_MODE_VIDEO = 1,
+} PFFaceDetectMode;
+
 typedef enum PFSrcType{
     PFSrcTypeFilter = 0,
     PFSrcTypeAuthFile = 2,
     PFSrcTypeStickerFile = 3,
+    PFSrcTypeMakeup = 4,
+    PFSrcTypeHumanProcessor = 5,
 } PFSrcType;
 
 typedef struct {
@@ -115,6 +122,56 @@ typedef struct {
     float similarity; //相似度
 } PFHLSFilterParams;
 
+/* 美体类型（基于人体 25 关键点） */
+typedef enum PFBodyBeautyType {
+    // 预设组合：0~6 对应 H 型 / 沙漏型 / 梨型 / 自然 / 苹果 / 型男 / 双开门
+    PFBodyBeautyTypePreset = 0,
+    // 瘦身（整体）
+    PFBodyBeautyTypeSlimBody,
+    // 瘦腰
+    PFBodyBeautyTypeSlimWaist,
+    // 沙漏腰 / 小肚子
+    PFBodyBeautyTypeBelly,
+    // 曲线（胸腰臀 S 曲线）
+    PFBodyBeautyTypeCurve,
+    // 全身瘦（整体横向压缩）
+    PFBodyBeautyTypeFullSlim,
+    // 提跨（0.5 中性；>0.5 上提，<0.5 下压）
+    PFBodyBeautyTypeHipLift,
+    // 丰臀（0.5 中性；>0.5 丰臀，<0.5 缩臀）
+    PFBodyBeautyTypeHipEnlarge,
+    // 丰胸
+    PFBodyBeautyTypeBreastEnlarge,
+    // 手臂
+    PFBodyBeautyTypeSlimArm,
+    // 天鹅颈
+    PFBodyBeautyTypeSwanNeck,
+    // 瘦肩膀
+    PFBodyBeautyTypeShoulderThin,
+    // 直角肩
+    PFBodyBeautyTypeRightAngleShoulder,
+    // 左大臂（7-8）
+    PFBodyBeautyTypeLeftUpperArm,
+    // 左小臂（8-9）
+    PFBodyBeautyTypeLeftLowerArm,
+    // 右大臂（10-11）
+    PFBodyBeautyTypeRightUpperArm,
+    // 右小臂（11-12）
+    PFBodyBeautyTypeRightLowerArm,
+    // 左大腿（0-1）
+    PFBodyBeautyTypeLeftUpperLeg,
+    // 左小腿（1-2）
+    PFBodyBeautyTypeLeftLowerLeg,
+    // 右大腿（3-4）
+    PFBodyBeautyTypeRightUpperLeg,
+    // 右小腿（4-5）
+    PFBodyBeautyTypeRightLowerLeg,
+    // 长腿（0.5 中性；>0.5 拉长，<0.5 缩短）：沿胯→踝矩形、脚下再延 20%、横向胯宽×1.3）
+    PFBodyBeautyTypeHeight,
+    // 瘦肚子（0.5 中性；同瘦身径向液化，作用半径小于瘦身）
+    PFBodyBeautyTypeSlimBelly,
+} PFBodyBeautyType;
+
 /* 美颜类型 */
 typedef enum PFBeautyFilterType{
     PFBeautyFilterTypeFace_EyeStrength = 0,
@@ -157,6 +214,7 @@ typedef enum PFBeautyFilterType{
     //新美白算法 （基于阴影保护美白）
     PFBeautyFilterTypeFaceM_newWhitenStrength,
     //画质增强
+    // @deprecated v2.5.01 已废弃，请使用 PFBeautyFilterTypeFaceSharpenStrength
     PFBeautyFilterTypeFaceH_qualityStrength,
     //亮眼（0~1）
     PFBeautyFilterTypeFaceEyeBrighten,
@@ -179,6 +237,61 @@ typedef enum PFBeautyFilterType{
     PFBeautyFilterNasolabial,
     // 祛黑眼圈
     PFBeautyFilterBlackEye,
+    // 白牙
+    PFBeautyFilterWhitenTeeth,
+
+    // ===== 新增：PFWarpFace 细分（ins1.png 0-74）=====
+    // 默认值：0.5（中性，不改变）
+    // 取值建议：0.0 ~ 1.0
+
+    // 眼部：眼睛上下（整体上/下移）
+    // 默认值：0.5；>0.5 上移，<0.5 下移
+    PFBeautyFilterTypeFace_eye_y,
+    // 眼部：眼高低（上下眼睑开合）
+    // 默认值：0.5；>0.5 眼裂增大，<0.5 眼裂减小
+    PFBeautyFilterTypeFace_eye_height,
+    // 鼻部：鼻子整体大小
+    // 默认值：0.5；>0.5 放大，<0.5 缩小
+    PFBeautyFilterTypeFace_nose_size,
+    // 鼻部：鼻子高低（纵向高度感）
+    // 默认值：0.5；>0.5 增高，<0.5 降低
+    PFBeautyFilterTypeFace_nose_height,
+    // 鼻部：鼻子上下（整体位置上/下移）
+    // 默认值：0.5；>0.5 上移，<0.5 下移
+    PFBeautyFilterTypeFace_nose_y,
+    // 鼻部：鼻尖
+    // 默认值：0.5；>0.5 更突出，<0.5 更收敛
+    PFBeautyFilterTypeFace_nose_tip,
+    // 鼻部：鼻梁
+    // 默认值：0.5；>0.5 更立体，<0.5 更平缓
+    PFBeautyFilterTypeFace_nose_bridge,
+    // 眉部：眉粗细
+    // 默认值：0.5；>0.5 加粗，<0.5 变细
+    PFBeautyFilterTypeFace_brow_thickness,
+    // 眉部：眉长短
+    // 默认值：0.5；>0.5 变长，<0.5 变短
+    PFBeautyFilterTypeFace_brow_length,
+    // 眉部：眉提升
+    // 默认值：0.5；>0.5 上提，<0.5 下压
+    PFBeautyFilterTypeFace_brow_lift,
+    // 眉部：眉距离
+    // 默认值：0.5；>0.5 拉开，<0.5 靠近
+    PFBeautyFilterTypeFace_brow_distance,
+    // 眉部：眉倾斜
+    // 默认值：0.5；>0.5 眉尾上扬，<0.5 眉尾下压
+    PFBeautyFilterTypeFace_brow_tilt,
+    // 唇部：上唇厚度
+    // 默认值：0.5；>0.5 变厚，<0.5 变薄
+    PFBeautyFilterTypeFace_upper_lip_thickness,
+    // 唇部：下唇厚度
+    // 默认值：0.5；>0.5 变厚，<0.5 变薄
+    PFBeautyFilterTypeFace_lower_lip_thickness,
+    // 唇部：丰唇（整体饱满/收薄）
+    // 默认值：0.5；>0.5 更饱满，<0.5 更收薄
+    PFBeautyFilterTypeFace_lip_fullness,
+    // 唇部：嘴唇宽度
+    // 默认值：0.5；>0.5 变宽，<0.5 变窄
+    PFBeautyFilterTypeFace_mouth_width,
     
 } PFBeautyFilterType;
 
@@ -203,6 +316,8 @@ PF_CAPI_EXPORT extern const char* PF_Version();
 typedef struct PFPixelFree PFPixelFree;
 
 PF_CAPI_EXPORT extern void PF_VLogSetLevel(PFPixelFree* pixelFree,int level,char *path);
+// 启用/禁用日志输出到控制台（1: 启用，0: 禁用），全局开关
+PF_CAPI_EXPORT extern void PF_VLogSetConsoleEnabled(int enabled);
 
 PF_CAPI_EXPORT extern PFPixelFree* PF_NewPixelFree();
 
@@ -212,16 +327,44 @@ PF_CAPI_EXPORT extern void PF_DeletePixelFree(PFPixelFree* pixelFree);
 PF_CAPI_EXPORT extern int PF_processWithBuffer(PFPixelFree* pixelFree,PFImageInput inputImage);
 
 PF_CAPI_EXPORT extern void PF_pixelFreeSetBeautyFilterParam(PFPixelFree* pixelFree, int key,void *value);
+PF_CAPI_EXPORT extern void PF_pixelFreeSetBodyBeautyParam(PFPixelFree* pixelFree, int key, void *value);
 PF_CAPI_EXPORT extern void PF_createBeautyItemFormBundle(PFPixelFree* pixelFree, void *data,int size,PFSrcType type);
 
 PF_CAPI_EXPORT extern void PF_pixelFreeGetFaceRect(PFPixelFree* pixelFree,float *faceRect);
 
 PF_CAPI_EXPORT extern int PF_pixelFreeHaveFaceSize(PFPixelFree* pixelFree);
 
+PF_CAPI_EXPORT extern void PF_pixelFreeSetDetectMode(PFPixelFree* pixelFree, PFFaceDetectMode mode);
+
+PF_CAPI_EXPORT extern int PF_pixelFreeHasFace(PFPixelFree* pixelFree);
+
 PF_CAPI_EXPORT extern int PF_pixelFreeColorGrading(PFPixelFree* pixelFree,PFImageColorGrading* ImageColorGrading);
 PF_CAPI_EXPORT extern int PF_pixelFreeAddHLSFilter(PFPixelFree* pixelFree,PFHLSFilterParams* HLSFilterParams);
 PF_CAPI_EXPORT extern int PF_pixelFreeDeleteHLSFilter(PFPixelFree* pixelFree,int handle);
 PF_CAPI_EXPORT extern int PF_pixelFreeChangeHLSFilter(PFPixelFree* pixelFree,int handle,PFHLSFilterParams* HLSFilterParams);
+// 独立美妆：传入 makeup.json 路径
+PF_CAPI_EXPORT extern int PF_pixelFreeSetMakeupPath(PFPixelFree* pixelFree, const char* makeupJsonPath);
+PF_CAPI_EXPORT extern int PF_pixelFreeClearMakeup(PFPixelFree* pixelFree);
+
+// 美妆部位
+typedef enum PFMakeupPart {
+    PFMakeupPartBrow = 0,
+    PFMakeupPartBlusher = 1,
+    PFMakeupPartEyeShadow = 2,
+    PFMakeupPartEyeLiner = 3,
+    PFMakeupPartEyeLash = 4,
+    PFMakeupPartLip = 5,
+    PFMakeupPartHighlight = 6,
+    PFMakeupPartShadow = 7,
+    PFMakeupPartFoundation = 8
+} PFMakeupPart;
+
+// 设置美妆各部位程度值（与配置叠乘）
+PF_CAPI_EXPORT extern int PF_pixelFreeSetMakeupPartDegree(PFPixelFree* pixelFree, int part, float degree);
+
+// 设置是否开启皮肤分割（Skin Mask），enable != 0 表示开启
+PF_CAPI_EXPORT extern void PF_pixelFreeSetSkinMask(PFPixelFree* pixelFree, int enable);
+
 #ifdef __cplusplus
 }
 #endif

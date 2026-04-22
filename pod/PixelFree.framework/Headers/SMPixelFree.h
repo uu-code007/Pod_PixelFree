@@ -59,12 +59,21 @@ __attribute__((visibility("default"))) @interface SMPixelFree : NSObject
 
 - (void)pixelFreeSetBeautyFilterParam:(int)key value:(void *)value;
 
+// 美体参数（基于人体 25 关键点）
+- (void)pixelFreeSetBodyBeautyParam:(int)key value:(void *)value;
+
 // 加载美颜bundle
-- (void)createBeautyItemFormBundle:(void*)data size:(int)sz;
+- (void)createBeautyItemFormBundleKey:(int)key data:(void*)data size:(int)sz;
 
 - (void)pixelFreeGetFaceRect:(float *)faceRect;
 
 - (int)getPixelFreeFaceNum;
+
+// 设置图片检测模式
+- (void)setDetectMode:(int)mode;
+
+// 获取是否检测到人脸
+- (int)hasFace;
 
 // 图片调色设置
 - (int)pixelFreeSetColorGrading:(PFImageColorGrading *)imageColorGrading;
@@ -76,6 +85,18 @@ __attribute__((visibility("default"))) @interface SMPixelFree : NSObject
 
 // 自定义贴纸专属
 - (void)pixelFreeSetFiterStickerWithPath:(NSString *)path;
+
+- (int)pixelFreeSetMakeupWithJsonPath:(NSString *)jsonPath;
+- (int)clearMakeup;
+
+// 设置美妆部位程度（与配置叠乘）
+- (void)pixelFreeSetMakeupPart:(int)part degree:(float)degree;
+
+// 设置是否开启皮肤分割（Skin Mask），默认不开启
+- (void)pixelFreeSetSkinMaskEnabled:(BOOL)enabled;
+
+// 设置是否输出日志到控制台（全局开关）
+- (void)setConsoleLogEnabled:(BOOL)enabled;
 
 @end
 
